@@ -11,8 +11,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Server {
-	public static void Server_ON_Put() throws IOException {
-		ServerSocket server = new ServerSocket(8082);
+	public static void Server_ON_Put(ServerSocket server) throws IOException {
 		Socket socket = server.accept();
 		int len; 
 		byte[] buffer = new byte[1024];
@@ -36,10 +35,8 @@ public class Server {
 		
 		outstream.close();
 		socket.close();
-		server.close();
 	}
-	public static void Server_ON_Get() throws IOException {
-		ServerSocket server = new ServerSocket(8082);
+	public static void Server_ON_Get(ServerSocket server) throws IOException {
 		Socket socket = server.accept();
 		
 		OutputStream outputstream = socket.getOutputStream();
@@ -61,17 +58,32 @@ public class Server {
 		
 		inputstream.close();
 		socket.close();
-		server.close();
 	}
 	public static void main(String[] args) throws IOException {
+		ServerSocket server = new ServerSocket(8082);
 		Scanner read = new Scanner(System.in);
-		int a = read.nextInt();
-		if(a==1) {
-			Server_ON_Get();
-		}
-		else {
-			Server_ON_Put();
+		int entry;
+
+		while(true) {
+			Socket socket = server.accept();
+			InputStream intputStream = socket.getInputStream();
+			DataInputStream d = new DataInputStream(intputStream);
+			
+			String num = d.readUTF();
+			entry = Integer.parseInt(num);
+			socket.close();
+			System.out.println(entry);
+			if(entry==1) {
+				Server_ON_Get(server);
+			}
+			else if(entry==2) {
+				Server_ON_Put(server);
+			}
+			else{
+				break;
+			}
 		}
 		read.close();
+		server.close();
 	}
 }

@@ -202,21 +202,45 @@ public class Util {
 				ListEveryThing();
 			}
 			else if (entry ==3) {
+				Socket socket = new Socket("localhost", 8082);
+				OutputStream outputstream = socket.getOutputStream();
+				
+				DataOutputStream d = new DataOutputStream(outputstream);
+				
+		        d.writeUTF("2");
 				String dir = read.next();
 				String filename = read.next();
+				outputstream.close();
+				socket.close();
 				Client_ON_Put(username, dir, filename);
 			}
 			else if (entry == 4) {
+				Socket socket = new Socket("localhost", 8082);
+				OutputStream outputstream = socket.getOutputStream();
+				
+				DataOutputStream d = new DataOutputStream(outputstream);
+				
+		        d.writeUTF("1");
+				outputstream.close();
+				socket.close();
 				String destdir = read.next();
 				String filename = read.next();
 				Client_ON_Get(username, destdir, filename);
 			}
-			/*if (entry == 3){
+			/*if (entry == 5){
 				(new Thread(new MockThread())).start();
 				(new Thread(new MockThread())).start();
 				(new Thread(new MockThread())).start();
 			}*/
 		}
+		Socket socket = new Socket("localhost", 8082);
+		OutputStream outputstream = socket.getOutputStream();
+		
+		DataOutputStream d = new DataOutputStream(outputstream);
+		
+        d.writeUTF("0");
+		outputstream.close();
+		socket.close();
 		
 		read.close();
 		br.close();
