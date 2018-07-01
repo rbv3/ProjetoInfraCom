@@ -65,22 +65,25 @@ public class Server {
 		int entry;
 
 		while(true) {
-			Socket socket = server.accept();
-			InputStream intputStream = socket.getInputStream();
-			DataInputStream d = new DataInputStream(intputStream);
-			
-			String num = d.readUTF();
-			entry = Integer.parseInt(num);
-			socket.close();
-			System.out.println(entry);
-			if(entry==1) {
-				Server_ON_Get(server);
-			}
-			else if(entry==2) {
-				Server_ON_Put(server);
-			}
-			else{
-				break;
+			// omp parallel 
+			{
+				Socket socket = server.accept();
+				InputStream intputStream = socket.getInputStream();
+				DataInputStream d = new DataInputStream(intputStream);
+				
+				String num = d.readUTF();
+				entry = Integer.parseInt(num);
+				socket.close();
+				System.out.println(entry);
+				if(entry==1) {
+					Server_ON_Get(server);
+				}
+				else if(entry==2) {
+					Server_ON_Put(server);
+				}
+				else{
+					break;
+				}
 			}
 		}
 		read.close();
