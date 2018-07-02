@@ -19,24 +19,6 @@ def getLine():
 			return input
 	return False
 
-def recFromServer(s):
-	ready = select.select([s], [], [], 10)
-	if ready[0]:
-		message, address = s.recvfrom(8192)
-		return True
-	else:
-		print("No response from server, trying again...")
-		return False
-
-def sendServer(s, x):
-	z = "0"
-	s.sendto(x.encode('utf-8'), serverAddr)
-	while (not recFromServer(s)):
-		pass
-	if message:
-		z = (message.decode('utf-8'))
-	return z
-
 address = ""
 message = ""
 serverHost = "192.168.1.255"
@@ -133,12 +115,27 @@ while 1:
 		except socket.timeout:
 			print("A player disconnected")
 			playerCount -= 1
-			if playerCount<2:
-				print("Not enough players for a match, finding new game...")
-			else:
+			if playerCount>=2:
 				print("Restarting game...")
+			else:
+				print("Not enough players for a match, finding new game...")
 				gameSocket.close()
-				gamePort = int(sendServer(serverSocket, "hi"))
-				myId = int(sendServer(serverSocket, "0"))
+				try:
+					(data, address) = serverSocket.recvfrom(8192)
+				except:
+					print("No response from server, trying again...")
+					pass
+					
+				recv = data.decode('utf-8').split()
+				gamePort = recv[1]
+				myId = recv[0]
+
+				gameAddr = (serverHost, gamePort)
+				gameSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+				gameSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Make Socket Reusable
+				gameSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1) # Allow incoming broadcasts
+				gameSocket.setblocking(False) # Set socket to non-blocking mode
+				gameSocket.bind(('', gamePort)) #Accept Connections on port
+				print("Connecting to", gamePort)
 				print("Connected to game port", gamePort, "with ID", myId)
 				break

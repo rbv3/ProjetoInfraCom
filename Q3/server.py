@@ -1,14 +1,6 @@
 import socket
 import sys, select
  
-def getLine():
-	i,o,e = select.select([sys.stdin],[],[],0.0001)
-	for s in i:
-		if s == sys.stdin:
-			input = sys.stdin.readline()
-			return input
-	return False
- 
 serverHost = "192.168.1.255"
 serverPort = 8080
 gamePort = 8081
