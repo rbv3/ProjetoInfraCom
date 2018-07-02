@@ -3,11 +3,10 @@
 import sys
 from socket import *
 
-serverAddr = input('Digite o IP do servidor\n')
+serverAddr = "127.0.0.1"
 serverPort = 8080
 
 mySocket = socket( AF_INET, SOCK_DGRAM )
-hostName = gethostbyname( '0.0.0.0' )
 
 data = ""
 while str(data).upper().find("SAIR") < 0:
