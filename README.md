@@ -1,3 +1,3 @@
 # ProjetoInfraCom
 
-Projeto da cadeira infraestrutura de comunicação - cin
+Projeto da cadeira infraestrutura de comunicação - cin ufpe
