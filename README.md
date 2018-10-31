@@ -1,3 +1,3 @@
 # ProjetoInfraCom
 
-Projeto da cadeira infra de com
+Projeto da cadeira infra de comunicação
